@@ -14,15 +14,11 @@ function parse(input) {
   return { l, r, char, password };
 }
 
-function xor(a, b) {
-  return (a && !b) || (b && !a);
-}
-
 function test(input) {
   const { l, r, char, password } = parse(input);
   const char_a = password[l - 1];
   const char_b = password[r - 1];
-  return xor(char_a === char, char_b === char);
+  return (char_a === char ^ char_b === char) > 0;
 }
 
 const passes = lines.map(l => test(l)).filter(l => l === true);
