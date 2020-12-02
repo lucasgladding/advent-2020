@@ -2,7 +2,7 @@ const fs = require('fs');
 
 const contents = fs.readFileSync('./input.txt').toString();
 
-const nums = contents.split('\n').map(item => Number(item));
+const nums = contents.split('\n').map(item => parseInt(item));
 
 const sorted = nums.sort((a, b) => a - b);
 
