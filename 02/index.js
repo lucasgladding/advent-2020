@@ -14,12 +14,16 @@ function parse(input) {
   return { l, r, char, password };
 }
 
-function test(input) {
+function test_1(input) {
   const { l, r, char, password } = parse(input);
   const count = password.split('').filter(p => p === char).length;
   return count >= l && count <= r;
 }
 
-const passes = lines.map(l => test(l)).filter(l => l === true);
+function test_2(input) {
+  const { l, r, char, password } = parse(input);
+  return (password[l - 1] === char ^ password[r - 1] === char) > 0;
+}
 
-console.log(passes.length);
+console.log(lines.map(l => test_1(l)).filter(l => l === true).length);
+console.log(lines.map(l => test_2(l)).filter(l => l === true).length);
