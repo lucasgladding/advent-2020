@@ -8,8 +8,12 @@ function get(grid, x, y) {
   if (!grid[y]) {
     return false;
   }
-  const ax = x % grid[y].length;
-  return grid[y][ax];
+  const length = grid[y].length;
+  return grid[y][x % length];
+}
+
+function tree(grid, x, y) {
+  return get(grid, x, y) === '#';
 }
 
 function go(grid, dx, dy) {
@@ -17,12 +21,11 @@ function go(grid, dx, dy) {
   let y = 0;
   let count = 0;
   do {
-    const v = get(grid, x, y);
-    if (v === '#') {
+    if (tree(grid, x, y)) {
       count++;
     }
-    x = x + dx;
-    y = y + dy;
+    x += dx;
+    y += dy;
   } while (y <= grid.length);
   return count;
 }
