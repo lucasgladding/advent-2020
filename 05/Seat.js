@@ -29,18 +29,18 @@ class Seat {
   }
 
   static parse(input) {
-    const rows = Seat.parse_range(input.substring(0, 7).split(''), ROWS_RANGE, ROWS_MAP);
-    const cols = Seat.parse_range(input.substring(7).split(''), COLS_RANGE, COLS_MAP);
+    const rows = Seat.search(input.substring(0, 7).split(''), ROWS_RANGE, ROWS_MAP);
+    const cols = Seat.search(input.substring(7).split(''), COLS_RANGE, COLS_MAP);
     return new Seat(rows.min, cols.min);
   }
 
-  static parse_range(input, range, map) {
+  static search(input, range, map) {
     if (!input.length) {
       return range;
     }
     const [code, ...remaining] = input;
     const prop = map[code];
-    return Seat.parse_range(remaining, range[prop], map);
+    return Seat.search(remaining, range[prop], map);
   }
 
   get id() {
