@@ -10,7 +10,7 @@ function test_i(data, pre, i) {
   });
 }
 
-function test(data, pre) {
+function get_invalid(data, pre) {
   for (let i = pre; i < data.length; i++) {
     const output = test_i(data, pre, i);
     if (!output) {
@@ -20,7 +20,7 @@ function test(data, pre) {
   return undefined;
 }
 
-function find_hash(data, target) {
+function get_hash(data, target) {
   for (let i = 0; i < data.length; i++) {
     let sum = data[i];
     for (let j = i - 1; j > -1 && sum < target; j--) {
@@ -34,4 +34,4 @@ function find_hash(data, target) {
   return undefined;
 }
 
-module.exports = {parse, test, find_hash};
+module.exports = {parse, get_invalid, get_hash};
