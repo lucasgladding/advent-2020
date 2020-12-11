@@ -1,5 +1,5 @@
 const read = require('../read');
-const { find_diff, count } = require('./index');
+const { find_diff, count_1, count_2 } = require('./index');
 
 const example_1 = read(__dirname + '/example-1.txt');
 const example_2 = read(__dirname + '/example-2.txt');
@@ -21,28 +21,32 @@ describe('part 1', () => {
   });
 });
 
+function prepare(input) {
+  const nums = input.split('\n').map(i => +i);
+  const sorted = nums.sort((a, b) => a - b);
+  return [
+    0,
+    ...sorted,
+    sorted[sorted.length - 1] + 3,
+  ];
+}
+
 describe('part 2', () => {
   it('determines the combinations for example 1', () => {
-    const nums = example_1.split('\n').map(i => +i);
-    const sorted = nums.sort((a, b) => a - b);
-    const max = sorted[sorted.length - 1] + 3;
-    const output = count(sorted, 0, max);
+    const sequence = prepare(example_1);
+    const output = count_2(sequence);
     expect(output).toEqual(8);
   });
 
   it('determines the combinations for example 2', () => {
-    const nums = example_2.split('\n').map(i => +i);
-    const sorted = nums.sort((a, b) => a - b);
-    const max = sorted[sorted.length - 1] + 3;
-    const output = count(sorted, 0, max);
+    const sequence = prepare(example_2);
+    const output = count_2(sequence);
     expect(output).toEqual(19208);
   });
 
   it('determines the combinations for input', () => {
-    const nums = input.split('\n').map(i => +i);
-    const sorted = nums.sort((a, b) => a - b);
-    const max = sorted[sorted.length - 1] + 3;
-    const output = count(sorted, 0, max);
-    expect(output).toEqual(1);
+    const sequence = prepare(input);
+    const output = count_2(sequence);
+    expect(output).toEqual(37024595836928);
   });
 });

@@ -16,16 +16,10 @@ function remove(input, i) {
   ];
 }
 
-function test(input, min, max) {
-  for (let i = 0; i < input.length; i++) {
+function test(input) {
+  for (let i = 1; i < input.length; i++) {
     const current = input[i];
     const previous = input[i - 1];
-    if (i === 0 && current - min > 3) {
-      return false;
-    }
-    if (i === input.length - 1 && max - current > 3) {
-      return false;
-    }
     if (current - previous > 3) {
       return false;
     }
@@ -33,15 +27,39 @@ function test(input, min, max) {
   return true;
 }
 
-function count(input, min, max, start = 0) {
+function find_i(input) {
+  for (let i = 1; i < input.length; i++) {
+    const current = input[i];
+    const previous = input[i - 1];
+    if (current - previous === 3) {
+      return i;
+    }
+  }
+  return undefined;
+}
+
+function count_1(input, start = 1) {
   let output = 1;
-  for (let i = start; i < input.length; i++) {
+  for (let i = start; i < input.length - 1; i++) {
     const updated = remove(input, i);
-    if (test(updated, min, max)) {
-      output += count(updated, min, max, i);
+    if (test(updated)) {
+      output += count_1(updated, i);
     }
   }
   return output;
 }
 
-module.exports = { find_diff, test , count };
+function count_2(input, start = 1) {
+  const groups = [];
+  let i = 0;
+  let next = input;
+  while (i = find_i(next)) {
+    groups.push(next.slice(0, i));
+    next = next.slice(i);
+  }
+  return groups.reduce((output, group) => {
+    return output * count_1(group);
+  }, 1);
+}
+
+module.exports = { find_diff, count_1, count_2 };
