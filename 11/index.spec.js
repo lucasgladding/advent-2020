@@ -14,7 +14,7 @@ function is_occ(seats, x, y) {
     return seats[y][x] === '#';
 }
 
-function count_occ(seats, x, y) {
+function count_adj(seats, x, y) {
     return [
         is_occ(seats, x, y + 1),
         is_occ(seats, x + 1, y + 1),
@@ -29,31 +29,40 @@ function count_occ(seats, x, y) {
 
 function run(input) {
     const output = clone(input);
+    let count = 0;
     for (let y = 0; y < input.length; y++) {
         const r = input[y];
         for (let x = 0; x < r.length; x++) {
             const s = input[y][x];
-            if (s === 'L' && count_occ(input, x, y) === 0) {
+            if (s === 'L' && count_adj(input, x, y) === 0) {
                 output[y][x] = '#';
+                count++;
             }
-            if (s === '#' && count_occ(input, x, y) >= 4) {
+            if (s === '#' && count_adj(input, x, y) >= 4) {
                 output[y][x] = 'L';
+                count++;
             }
         }
     }
-    return output;
+    return [output, count];
 }
 
-function run_loop(input, count) {
+function run_loop(input) {
     let seats = input;
-    for (let i = 0; i < count; i++) {
-        seats = run(seats);
-    }
+    do {
+        [seats, count] = run(seats);
+    } while (count > 0);
     return seats;
 }
 
 function debug(input) {
     return input.map(i => i.join('')).join('\n');
+}
+
+function count_occ(seats) {
+    const output = debug(seats);
+    const matches = output.match(/#/g);
+    return matches.length;
 }
 
 describe('part 1', () => {
@@ -65,7 +74,7 @@ describe('part 1', () => {
 
     it('runs the input', () => {
         let seats = prepare(input);
-        seats = run_loop(seats, 5000);
-        console.log(debug(seats));
+        seats = run_loop(seats);
+        console.log(count_occ(seats));
     });
 });
