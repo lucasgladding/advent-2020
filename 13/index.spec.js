@@ -14,35 +14,30 @@ function get_wait(depart, id) {
     return id - (depart % id);
 }
 
-function get_min_wait_id(depart, ids) {
+function get_min_wait(depart, ids) {
     const items = ids.filter(id => id !== undefined);
     const waits = items.map(id => get_wait(depart, id));
-    const min = Math.min(...waits);
-    const i = waits.indexOf(min);
-    return items[i];
+    const wait = Math.min(...waits);
+    const i = waits.indexOf(wait);
+    return [wait, items[i]];
 }
 
 describe('part 1', () => {
     it('gets the solution for the example', () => {
         const { depart, ids } = parse(example);
-        const id = get_min_wait_id(depart, ids);
-        const wait = get_wait(depart, id);
+        const [wait, id] = get_min_wait(depart, ids);
         expect(id * wait).toEqual(295);
     });
 
     it('gets the solution for the input', () => {
         const { depart, ids } = parse(input);
-        const id = get_min_wait_id(depart, ids);
-        const wait = get_wait(depart, id);
+        const [wait, id] = get_min_wait(depart, ids);
         expect(id * wait).toEqual(153);
     });
 });
 
 function test_t(items, t) {
     return items.every(([id, i]) => {
-        if (id === undefined) {
-            return true;
-        }
         return (t + i) % id === 0;
     });
 }
