@@ -42,7 +42,7 @@ function test_t(items, t) {
     });
 }
 
-function get_t(ids) {
+function get_t_1(ids) {
     const items = ids.map((id, i) => [id, i]).filter(i => i[0] !== undefined);
     const id = Math.max(...items.map(item => item[0]));
     const [increment, start] = items.find(item => item[0] === id);
@@ -59,16 +59,37 @@ function get_t(ids) {
     return undefined;
 }
 
+function get_t_2(ids) {
+    const items = ids.map((id, i) => [id, i]).filter(i => i[0] !== undefined);
+
+    let t = 0;
+    let product = 1;
+    for (let [id, i] of items) {
+        do {
+            t += product;
+        } while ((t + i) % id !== 0);
+        product *= id;
+    }
+
+    return t;
+}
+
 describe('part 2', () => {
     it('gets the solution for the example', () => {
         const { ids } = parse(example);
-        const t = get_t(ids);
+        const t = get_t_1(ids.slice(0, 5));
+        expect(t).toEqual(1068781);
+    });
+
+    it('gets the solution for the example - 2', () => {
+        const { ids } = parse(example);
+        const t = get_t_1(ids.slice(0, 7));
         expect(t).toEqual(1068781);
     });
 
     it('gets the solution for the input', () => {
         const { ids } = parse(input);
-        const t = get_t(ids);
-        expect(t).toEqual(0);
+        const t = get_t_2(ids);
+        expect(t).toEqual(471793476184394);
     });
 });
