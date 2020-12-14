@@ -15,30 +15,31 @@ function get_wait(depart, id) {
 }
 
 function get_min_wait_id(depart, ids) {
-    const waits = ids.map(id => get_wait(depart, id));
+    const items = ids.filter(id => id !== undefined);
+    const waits = items.map(id => get_wait(depart, id));
     const min = Math.min(...waits);
     const i = waits.indexOf(min);
-    return ids[i];
+    return items[i];
 }
 
 describe('part 1', () => {
     it('gets the solution for the example', () => {
         const { depart, ids } = parse(example);
-        const id = get_min_wait_id(depart, ids.filter(id => id !== undefined));
+        const id = get_min_wait_id(depart, ids);
         const wait = get_wait(depart, id);
         expect(id * wait).toEqual(295);
     });
 
     it('gets the solution for the input', () => {
         const { depart, ids } = parse(input);
-        const id = get_min_wait_id(depart, ids.filter(id => id !== undefined));
+        const id = get_min_wait_id(depart, ids);
         const wait = get_wait(depart, id);
         expect(id * wait).toEqual(153);
     });
 });
 
-function test_t(ids, t) {
-    return ids.every(([id, i]) => {
+function test_t(items, t) {
+    return items.every(([id, i]) => {
         if (id === undefined) {
             return true;
         }
@@ -46,28 +47,33 @@ function test_t(ids, t) {
     });
 }
 
-function get_t(ids, start = 0) {
-    for (let t = start; t > -1; t++) {
-        const success = test_t(ids, t);
+function get_t(ids) {
+    const items = ids.map((id, i) => [id, i]).filter(i => i[0] !== undefined);
+    const id = Math.max(...items.map(item => item[0]));
+    const [increment, start] = items.find(item => item[0] === id);
+
+    let t = 0 - start;
+    while (true) {
+        const success = test_t(items, t);
         if (success) {
             return t;
         }
+        t += increment;
     }
+
     return undefined;
 }
 
 describe('part 2', () => {
     it('gets the solution for the example', () => {
         const { ids } = parse(example);
-        const buses = ids.map((id, i) => [id, i]).filter(i => i[0] !== undefined);
-        const t = get_t(buses);
+        const t = get_t(ids);
         expect(t).toEqual(1068781);
     });
 
     it('gets the solution for the input', () => {
         const { ids } = parse(input);
-        const buses = ids.map((id, i) => [id, i]).filter(i => i[0] !== undefined);
-        const t = get_t(buses);
+        const t = get_t(ids);
         expect(t).toEqual(0);
     });
 });
