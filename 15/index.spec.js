@@ -3,8 +3,7 @@ function update(logs, input, i) {
     logs[input] = [...items.slice(-1), i];
 }
 
-function get(sequence, logs, i) {
-    const last = sequence[i - 1] || 0;
+function get(last, logs, i) {
     const items = logs[last] || [];
     const length = items.length;
     if (length < 2) {
@@ -15,17 +14,14 @@ function get(sequence, logs, i) {
 
 function run(start, target) {
     let last = undefined;
-    const sequence = [];
-    const logs = [];
+    const logs = {};
     for (let i = 0; i < start.length; i++) {
         const input = start[i];
-        sequence.push(input);
         update(logs, input, i);
         last = input;
     }
     for (let j = start.length; j < target; j++) {
-        const input = get(sequence, logs, j);
-        sequence.push(input);
+        const input = get(last, logs, j);
         update(logs, input, j);
         last = input;
     }
@@ -46,5 +42,12 @@ describe('part 1', () => {
     it('gets the input', () => {
         const output = run([11, 18, 0, 20, 1, 7, 16], 2020);
         expect(output).toEqual(639);
+    });
+});
+
+describe('part 2', () => {
+    it('gets the input', () => {
+        const output = run([11, 18, 0, 20, 1, 7, 16], 30000000);
+        expect(output).toEqual(266);
     });
 });
