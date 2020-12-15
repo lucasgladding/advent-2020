@@ -1,8 +1,6 @@
-class Chip1 {
-    constructor() {
-        this.memory = [];
-    }
+const Chip = require('./Chip');
 
+class Chip1 extends Chip {
     run(instructions) {
         let mask = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
         for (let i of instructions) {
@@ -16,23 +14,18 @@ class Chip1 {
                     mask = argument;
                     break;
                 case 'mem':
-                    this.memory[+address] = this.mask(argument, mask);
+                    const value = parseInt(this.mask(argument, mask), 2)
+                    this.memory[+address] = value;
                     break;
             }
         }
     }
 
     mask(input, mask) {
-        const string = parseInt(input).toString(2).padStart(36, '0');
+        const string = this.parse(input);
         return string.split('').map((char, i) => {
             return mask[i] === 'X' ? char : mask[i];
         }).join('');
-    }
-
-    sum() {
-        return Object.values(this.memory).reduce((output, value) => {
-            return output + parseInt(value, 2);
-        }, 0);
     }
 }
 
