@@ -124,7 +124,7 @@ function get_next(dimension, x, y, z) {
     return new Cube(false);
 }
 
-function run(input, count) {
+function run(input) {
     const output = new Dimension();
     input.run((x, y, z) => {
         const next = get_next(input, x, y, z);
