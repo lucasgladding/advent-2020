@@ -19,8 +19,8 @@ class Cube {
 
 class Dimension {
     static parse(input) {
-        const coords = input.map(i => i.split('\n').map(i => i.split('').map(i => Cube.parse(i))));
-        return new Dimension(coords);
+        const coords = input.split('\n').map(i => i.split('').map(i => Cube.parse(i)));
+        return new Dimension([coords]);
     }
 
     constructor(coords = []) {
@@ -143,16 +143,17 @@ function loop(input, count) {
 
 describe('part 1', () => {
     it('counts the example', () => {
-        const dimension1 = Dimension.parse([example_1]);
+        const dimension1 = Dimension.parse(example_1);
         const dimension2 = loop(dimension1, 6);
         const count = dimension2.debug().match(/#/g).length;
         expect(count).toEqual(112);
     });
 
     it('counts the input', () => {
-        const dimension1 = Dimension.parse([input]);
+        const dimension1 = Dimension.parse(input);
         const dimension2 = loop(dimension1, 6);
-        const count = dimension2.debug().match(/#/g).length;
+        const debug = dimension2.debug();
+        const count = debug.match(/#/g).length;
         expect(count).toEqual(211);
     });
 });
